@@ -46,6 +46,6 @@ io.on('connection', function(socket){
     });
 });
 
-http.listen(6969, function(){
+http.listen(6969,'138.197.0.206', function(){
     console.log('listening on *:3000');
 });
