@@ -7,7 +7,7 @@ $(document).keypress(function(e) {
     }
 });
 
-var socket = io('http://127.0.0.1:3000');
+var socket = io('http://127.0.0.1:6969');
 
     socket.on('getmessage', function(msg){
         $('.chat').append('<div style="background: #'+msg.color+';">'+msg.msg+'</div>')
