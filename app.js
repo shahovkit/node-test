@@ -29,20 +29,46 @@ function intToRGB(i){
 
     return "00000".substring(0, 6 - c.length) + c;
 }
+
+generateId = ip => {
+        return ip.split("").reduce(function(a,b){a=((a<<5)-a)+b.charCodeAt(0);return a&a},0);
+};
+
 // app.get('/', function(req, res){
 //     res.sendFile(__dirname + '/index.html');
 // });
 
+let players = {};
+
 io.on('connection', function(socket){
-    console.log('New user connected ' + socket.handshake.address);
+    let id = String(Math.abs(generateId(socket.handshake.address)));
+    console.log('New user connected ' + id);
+    players[id] = {name:'player'+id, color: intToRGB(hashCode(socket.handshake.address)), coords:{top:100,left:100}};
+    io.emit('new_player', players[id]);
+
     socket.on('disconnect', function(){
+        players[id] = {};
         console.log('user disconnected');
     });
-    socket.on('message', function(msg){
-        console.log('message: ' + msg);
 
-        io.emit('getmessage', {color:intToRGB(hashCode(socket.handshake.address)),msg:msg});
-
+    socket.on('keypress', function(key){
+        console.log('user keypress - '+key);
+        if(key==115){
+            players[id].coords.top += 10;
+            io.emit('change_player', players[id]);
+        }
+        if(key==100){
+            players[id].coords.left += 10;
+            io.emit('change_player', players[id]);
+        }
+        if(key==119){
+            players[id].coords.top -= 10;
+            io.emit('change_player', players[id]);
+        }
+        if(key==97){
+            players[id].coords.left -= 10;
+            io.emit('change_player', players[id]);
+        }
     });
 });
 
