@@ -7,7 +7,7 @@ $(document).keypress( e => {
     }
 });
 
-var socket = io('http://127.0.0.1:8802');
+var socket = io('http://46.101.117.134:8802');
 
     socket.on('connect', ()=>{
         console.log('connect')
