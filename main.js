@@ -20,7 +20,7 @@ var socket = io('http://'+IP);
     socket.on('new_player', (obj)=>{
         $( "body" ).append( '<div class="player" style="background: #'+obj.new_player.color+'; top:'+obj.new_player.coords.top+'px;left:'+obj.new_player.coords.left+'px;" id="'+obj.new_player.name+'"></div>' );
         $.each( obj.players, function( index, player ){
-            if($('#'+player.name).length = 0){
+            if($('#'+player.name).length === 0){
                 $( "body" ).append( '<div class="player" style="background: #'+player.color+'; top:'+player.coords.top+'px;left:'+player.coords.left+'px;" id="'+player.name+'"></div>' );
             }
 
