@@ -7,15 +7,14 @@ $(document).keypress( e => {
     }
 });
 
-var socket = io('http://46.101.117.134:8802');
+var socket = io('http://'+IP);
 
     socket.on('connect', ()=>{
         console.log('connect')
     });
 
     socket.on('new_player', (player)=>{
-        $( "body" ).append( '<div class="player" style="background: #'+player.color+';" id="'+player.name+'"></div>' );
-        $('#'+player.name).css({top:player.coords.top,left:player.coords.left});
+        $( "body" ).append( '<div class="player" style="background: #'+player.color+'; top:'+player.coords.top+'px;left:'+player.coords.left+'px;" id="'+player.name+'"></div>' );
         console.log(player)
     });
 
