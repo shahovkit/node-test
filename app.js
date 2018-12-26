@@ -14,6 +14,10 @@ app.get('/main.js', function(req, res){
     res.sendFile(__dirname + '/main.js');
 });
 
+app.get('/env.js', function(req, res){
+    res.sendFile(__dirname + '/env.js');
+});
+
 function hashCode(str) { // java String#hashCode
     var hash = 0;
     for (var i = 0; i < str.length; i++) {
