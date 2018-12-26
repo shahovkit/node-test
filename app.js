@@ -44,34 +44,38 @@ generateId = ip => {
 
 let players = {};
 
+// setInterval(()=>{
+//     io.emit('players_loop', {players:players,new_player });
+//     },16);
+
 io.on('connection', function(socket){
-    let id = String(Math.abs(generateId(socket.handshake.address)));
-    console.log('New user connected ' + id);
-    players[id] = {name:'player'+id, color: intToRGB(hashCode(socket.handshake.address)), coords:{top:100,left:100}};
-    io.emit('new_player', players[id]);
+
+    console.log('New user connected ' + String(Math.abs(generateId(socket.handshake.address))));
+    players[String(Math.abs(generateId(socket.handshake.address)))] = {name:'player'+String(Math.abs(generateId(socket.handshake.address))), color: intToRGB(hashCode(socket.handshake.address)), coords:{top:100,left:100}};
+    io.emit('new_player', {players:players,new_player:players[Math.abs(generateId(socket.handshake.address))] });
 
     socket.on('disconnect', function(){
-        players[id] = {};
-        console.log('user disconnected');
+        io.emit('disconnect', players[String(Math.abs(generateId(socket.handshake.address)))]);
+        players[String(Math.abs(generateId(socket.handshake.address)))] = undefined;
+        console.log('user '+String(Math.abs(generateId(socket.handshake.address)))+' disconnected');
     });
 
     socket.on('keypress', function(key){
-        console.log('user keypress - '+key);
         if(key==115){
-            players[id].coords.top += 10;
-            io.emit('change_player', players[id]);
+            players[String(Math.abs(generateId(socket.handshake.address)))].coords.top += 10;
+            io.emit('change_player', players[String(Math.abs(generateId(socket.handshake.address)))]);
         }
         if(key==100){
-            players[id].coords.left += 10;
-            io.emit('change_player', players[id]);
+            players[String(Math.abs(generateId(socket.handshake.address)))].coords.left += 10;
+            io.emit('change_player', players[String(Math.abs(generateId(socket.handshake.address)))]);
         }
         if(key==119){
-            players[id].coords.top -= 10;
-            io.emit('change_player', players[id]);
+            players[String(Math.abs(generateId(socket.handshake.address)))].coords.top -= 10;
+            io.emit('change_player', players[String(Math.abs(generateId(socket.handshake.address)))]);
         }
         if(key==97){
-            players[id].coords.left -= 10;
-            io.emit('change_player', players[id]);
+            players[String(Math.abs(generateId(socket.handshake.address)))].coords.left -= 10;
+            io.emit('change_player', players[String(Math.abs(generateId(socket.handshake.address)))]);
         }
     });
 });
