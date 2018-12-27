@@ -44,11 +44,13 @@ generateId = ip => {
 
 let players = {};
 
-// setInterval(()=>{
-//     io.emit('players_loop', {players:players,new_player });
-//     },16);
 
-io.on('connection', function(socket){
+
+io.on('connection', async socket => {
+
+    setInterval(()=>{
+        io.emit('change_player', players[String(Math.abs(generateId(socket.handshake.address)))]);
+    },40);
 
     console.log('New user connected ' + String(Math.abs(generateId(socket.handshake.address))));
     players[String(Math.abs(generateId(socket.handshake.address)))] = {name:'player'+String(Math.abs(generateId(socket.handshake.address))), color: intToRGB(hashCode(socket.handshake.address)), coords:{top:100,left:100}};
@@ -59,23 +61,47 @@ io.on('connection', function(socket){
         players[String(Math.abs(generateId(socket.handshake.address)))] = undefined;
         console.log('user '+String(Math.abs(generateId(socket.handshake.address)))+' disconnected');
     });
+    let W,A,S,D;
 
-    socket.on('keypress', function(key){
-        if(key==115){
-            players[String(Math.abs(generateId(socket.handshake.address)))].coords.top += 10;
-            io.emit('change_player', players[String(Math.abs(generateId(socket.handshake.address)))]);
+    socket.on('keydown', function(key){
+        switch (key) {
+            case 83://S
+                S = setInterval(()=>{
+                    players[String(Math.abs(generateId(socket.handshake.address)))].coords.top += 10;
+                },40);
+                break;
+            case 68://D
+                D = setInterval(()=>{
+                    players[String(Math.abs(generateId(socket.handshake.address)))].coords.left += 10;
+                },40);
+                break;
+            case 87://W
+                W = setInterval(()=>{
+                    players[String(Math.abs(generateId(socket.handshake.address)))].coords.top -= 10;
+                },40);
+                break;
+            case 65://A
+                A = setInterval(()=>{
+                    players[String(Math.abs(generateId(socket.handshake.address)))].coords.left -= 10;
+                },40);
+                break;
         }
-        if(key==100){
-            players[String(Math.abs(generateId(socket.handshake.address)))].coords.left += 10;
-            io.emit('change_player', players[String(Math.abs(generateId(socket.handshake.address)))]);
-        }
-        if(key==119){
-            players[String(Math.abs(generateId(socket.handshake.address)))].coords.top -= 10;
-            io.emit('change_player', players[String(Math.abs(generateId(socket.handshake.address)))]);
-        }
-        if(key==97){
-            players[String(Math.abs(generateId(socket.handshake.address)))].coords.left -= 10;
-            io.emit('change_player', players[String(Math.abs(generateId(socket.handshake.address)))]);
+    });
+
+    socket.on('keyup', function(key){
+        switch (key) {
+            case 83:
+                clearInterval(S);
+                break;
+            case 68:
+                clearInterval(D);
+                break;
+            case 87:
+                clearInterval(W);
+                break;
+            case 65:
+                clearInterval(A);
+                break;
         }
     });
 });

@@ -32,11 +32,75 @@ socket.on('change_player', (player)=>{
     $('#'+player.name).css({top:player.coords.top,left:player.coords.left});
 });
 
-$( window ).keypress(function( event ) {
+let W=false,
+    A=false,
+    S=false,
+    D=false;
 
-    if (event.which === 97 || event.which === 100 || event.which === 115 || event.which === 119) {
-        event.preventDefault();
-        socket.emit('keypress', event.which)
+$( window ).keydown(function( event ) {
+
+        switch (event.which) {
+            case 87://W
+                event.preventDefault();
+                if(!W){
+                    W=true;
+                    console.log(event.which+' keydown');
+                    socket.emit('keydown', event.which)
+                }
+                break;
+            case 68://D
+                event.preventDefault();
+                if(!D) {
+                    D = true;
+                    console.log(event.which + ' keydown');
+                    socket.emit('keydown', event.which)
+                }
+                break;
+            case 83://S
+                event.preventDefault();
+                if(!S) {
+                    S = true;
+                    console.log(event.which + ' keydown');
+                    socket.emit('keydown', event.which)
+                }
+                break;
+            case 65://A
+                event.preventDefault();
+                if(!A) {
+                    A = true;
+                    console.log(event.which + ' keydown');
+                    socket.emit('keydown', event.which)
+                }
+                break;
+        }
+});
+
+$( window ).keyup(function( event ) {
+    switch (event.which) {
+        case 87://W
+            event.preventDefault();
+            W=false;
+            console.log(event.which+' keyup');
+            socket.emit('keyup', event.which)
+            break;
+        case 68://D
+            event.preventDefault();
+            D = false;
+            console.log(event.which + ' keyup');
+            socket.emit('keyup', event.which)
+            break;
+        case 83://S
+            event.preventDefault();
+            S = false;
+            console.log(event.which + ' keyup');
+            socket.emit('keyup', event.which)
+            break;
+        case 65://A
+            event.preventDefault();
+            A = false;
+            console.log(event.which + ' keyup');
+            socket.emit('keyup', event.which)
+            break;
     }
 });
 
